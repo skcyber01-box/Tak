@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="คอนโซลเฝ้าระวังสุขภาพศูนย์พักพิงชั่วคราวสำหรับผู้อพยพ 3 แห่ง จ.ตาก — ต้นแบบ ข้อมูลจำลอง โดย OneSpace Corporation">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="คอนโซลเฝ้าระวังศูนย์พักพิงตาก">
+<meta property="og:description" content="ต้นแบบคอนโซลเฝ้าระวังสุขภาพ 3 ศูนย์พักพิง จ.ตาก (ข้อมูลจำลอง)">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#161a26">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23161a26'/%3E%3Cpath d='M8 38h10l5-14 7 24 6-17 5 7h15' fill='none' stroke='%232a78d6' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>คอนโซลเฝ้าระวังศูนย์พักพิงตาก</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --plane:#eef0f4; --surface:#fcfcfd; --surface-2:#f4f6fa;
+  --rail:#161a26; --rail-ink:#aeb6c8; --rail-ink-2:#6d7689; --rail-on:#262c3e;
+  --ink:#0d1117; --ink-2:#313a4a; --muted:#59637a;
+  --grid:#dce0e9; --axis:#a6aec0; --hair:rgba(13,17,23,.13);
+  --accent:#36437a; --accent-soft:rgba(54,67,122,.10);
+  --good:#0ca30c; --warning:#fab219; --critical:#d03b3b;
+  --good-ink:#005a00; --warn-ink:#755100; --crit-ink:#95201f;
+  --c1:#2a78d6; --c2:#eb6834; --c3:#1baf7a;
+  --d1:#eda100; --d2:#e87ba4; --d3:#4a3aa7; --d4:#e34948;
+  --shadow:0 1px 2px rgba(13,17,23,.05), 0 10px 26px -20px rgba(13,17,23,.4);
+}
+@media (prefers-color-scheme: dark){ :root:where(:not([data-theme="light"])){
+  color-scheme: dark;
+  --plane:#0a0c12; --surface:#171a22; --surface-2:#1e222c;
+  --rail:#0c0e15; --rail-ink:#aeb6c8; --rail-ink-2:#6d7689; --rail-on:#242a3a;
+  --ink:#ffffff; --ink-2:#dde2ec; --muted:#98a2b6;
+  --grid:#2a3040; --axis:#4b5468; --hair:rgba(255,255,255,.13);
+  --accent:#93a4dd; --accent-soft:rgba(147,164,221,.14);
+  --good-ink:#2fbb2f; --warn-ink:#f0bd5c; --crit-ink:#f09090;
+  --c1:#3987e5; --c2:#d95926; --c3:#199e70;
+  --d1:#c98500; --d2:#d55181; --d3:#9085e9; --d4:#e66767;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 30px -22px #000;
+}}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0a0c12; --surface:#171a22; --surface-2:#1e222c;
+  --rail:#0c0e15; --rail-ink:#aeb6c8; --rail-ink-2:#6d7689; --rail-on:#242a3a;
+  --ink:#ffffff; --ink-2:#dde2ec; --muted:#98a2b6;
+  --grid:#2a3040; --axis:#4b5468; --hair:rgba(255,255,255,.13);
+  --accent:#93a4dd; --accent-soft:rgba(147,164,221,.14);
+  --good-ink:#2fbb2f; --warn-ink:#f0bd5c; --crit-ink:#f09090;
+  --c1:#3987e5; --c2:#d95926; --c3:#199e70;
+  --d1:#c98500; --d2:#d55181; --d3:#9085e9; --d4:#e66767;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 30px -22px #000;
+}
+
+*{box-sizing:border-box}
+body{ zoom:var(--z,1); margin:0; background:var(--plane); color:var(--ink);
+  font-family:"Anuphan", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono", ui-monospace, Menlo, monospace; font-variant-numeric:tabular-nums}
+
+/* ───────── shell ───────── */
+.shell{display:grid; grid-template-columns:230px minmax(0,1fr); min-height:100vh}
+@media (max-width:900px){ .shell{grid-template-columns:1fr} }
+
+.rail{background:var(--rail); color:var(--rail-ink); padding:20px 14px 28px; display:flex; flex-direction:column; gap:26px}
+@media (max-width:900px){ .rail{padding:14px} }
+.brand{display:flex; align-items:center; gap:11px; padding:0 6px}
+.mark{width:36px;height:36px;flex:none;border-radius:9px;background:#fff;color:#161a26;
+  display:grid;place-items:center;font-weight:700;font-size:13px;letter-spacing:.02em}
+.brand b{display:block; font-size:16px; font-weight:600; color:#fff; line-height:1.3}
+.brand span{display:block; font-size:13px; color:var(--rail-ink-2); line-height:1.35}
+nav{display:flex; flex-direction:column; gap:3px}
+@media (max-width:900px){ nav{flex-direction:row; flex-wrap:wrap} }
+.nav-h{font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--rail-ink-2);
+  font-weight:600; padding:0 10px; margin:6px 0 4px}
+@media (max-width:900px){ .nav-h{display:none} }
+nav button{display:flex; align-items:center; gap:11px; width:100%; text-align:left; cursor:pointer;
+  background:none; border:none; color:var(--rail-ink); font-family:inherit; font-size:16.5px;
+  padding:10px 11px; border-radius:9px; line-height:1.3}
+nav button:hover{background:var(--rail-on); color:#fff}
+nav button[aria-current="true"]{background:#fff; color:#161a26; font-weight:600}
+nav button:focus-visible{outline:2px solid #fff; outline-offset:2px}
+nav button i{width:9px;height:9px;border-radius:3px;flex:none;background:currentColor;opacity:.55}
+nav button[aria-current="true"] i{opacity:1}
+.rail-foot{margin-top:auto; font-size:13px; color:var(--rail-ink-2); padding:0 8px; line-height:1.55}
+
+/* ───────── top bar ───────── */
+.main{min-width:0; display:flex; flex-direction:column}
+.top{position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--hair);
+  padding:13px 22px; display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.vtitle{margin:0; font-size:21px; font-weight:600; letter-spacing:-.01em; margin-right:auto; line-height:1.25}
+.vtitle small{display:block; font-size:14px; font-weight:400; color:var(--muted); letter-spacing:0}
+.seg{display:flex; gap:3px; padding:3px; background:var(--surface-2); border:1px solid var(--hair); border-radius:999px}
+.seg button{border:none; background:none; cursor:pointer; font-family:inherit; font-size:15px;
+  color:var(--ink-2); padding:6px 14px; border-radius:999px; line-height:1.3}
+.seg button[aria-pressed="true"]{background:var(--accent); color:var(--surface); font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.zoomer button:nth-child(1){font-size:13px} .zoomer button:nth-child(2){font-size:18px}
+.zoomer button:nth-child(3){font-size:24px; line-height:1}
+.asof{font-size:14px; color:var(--ink-2); text-align:right; line-height:1.4; white-space:nowrap}
+.asof b{font-weight:600}
+.mockbar{background:var(--accent-soft); border-bottom:1px solid var(--hair); font-size:14.5px;
+  color:var(--ink-2); padding:9px 22px; font-weight:500}
+.mockbar b{color:var(--ink)}
+
+/* ───────── content ───────── */
+.view{padding:20px 22px 64px; display:grid; gap:16px}
+.row{display:grid; gap:16px}
+.r2{grid-template-columns:1fr 1fr}
+.r3{grid-template-columns:repeat(3,1fr)}
+.rsplit{grid-template-columns:minmax(0,1fr) 340px}
+@media (max-width:1180px){ .r2,.r3,.rsplit{grid-template-columns:1fr} }
+
+.card{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:18px 19px 16px;
+  box-shadow:var(--shadow); display:flex; flex-direction:column; min-width:0}
+.card h2{margin:0 0 3px; font-size:18px; font-weight:600; letter-spacing:-.005em}
+.card .note{margin:0 0 14px; font-size:14.5px; color:var(--ink-2); line-height:1.55}
+.card .note:last-child{margin-bottom:0}
+.eyebrow{margin:0 0 7px; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); font-weight:600}
+.spacer{flex:1 1 auto; min-height:0}
+
+/* kpi */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:13px}
+@media (max-width:1180px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .kpis{grid-template-columns:1fr} }
+.kpi{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:15px 16px 14px;
+  box-shadow:var(--shadow); border-left:4px solid var(--axis)}
+.kpi.ok{border-left-color:var(--good)} .kpi.warn{border-left-color:var(--warning)}
+.kpi.bad{border-left-color:var(--critical)}
+.kpi .lab{font-size:14.5px; color:var(--ink-2); font-weight:500; line-height:1.4; min-height:2.7em}
+.kpi .val{font-size:34px; font-weight:600; letter-spacing:-.025em; line-height:1.05; margin-top:6px}
+.kpi .val small{font-size:16px; font-weight:500; color:var(--ink-2); margin-left:4px; letter-spacing:0}
+.kpi .sub{font-size:14px; color:var(--ink-2); margin-top:5px; line-height:1.4}
+.up{color:var(--crit-ink); font-weight:600} .dn{color:var(--good-ink); font-weight:600}
+.flat{color:var(--ink-2); font-weight:600}
+
+/* alerts */
+.alert{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:14px; align-items:start;
+  padding:15px 0; border-top:1px solid var(--grid)}
+.alert:first-of-type{border-top:none; padding-top:2px}
+.sev{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;
+  font-size:14px;font-weight:700;color:#fff;margin-top:2px}
+.sev.critical{background:var(--critical)} .sev.warning{background:var(--warning);color:#3a2a00}
+.sev.good{background:var(--good)}
+.alert .ttl{margin:0; font-size:16.5px; font-weight:600; line-height:1.35}
+.alert .meta{margin:4px 0 0; font-size:14.5px; color:var(--ink-2); line-height:1.6}
+.alert code{font-family:"IBM Plex Mono",monospace; font-size:13px; background:var(--surface-2);
+  border:1px solid var(--hair); padding:1px 6px; border-radius:5px}
+.sla{text-align:right; font-size:13px; color:var(--ink-2); white-space:nowrap; line-height:1.4}
+.sla b{display:block; font-size:21px; font-family:"IBM Plex Mono",monospace;
+  font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+.sla.over b{color:var(--crit-ink)} .sla.near b{color:var(--warn-ink)} .sla.okk b{color:var(--good-ink)}
+
+/* disease group cards */
+.dg{background:var(--surface); border:1px solid var(--hair); border-radius:13px; padding:17px 18px 15px;
+  box-shadow:var(--shadow); cursor:pointer; text-align:left; font-family:inherit; width:100%;
+  display:flex; flex-direction:column; gap:3px}
+.dg:hover{border-color:var(--accent)}
+.dg:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.dg .nm{font-size:16.5px; font-weight:600; display:flex; align-items:center; gap:9px}
+.dg .nm span{margin-left:auto; font-size:13px; font-weight:700; padding:2px 9px; border-radius:999px}
+.dg .big{font-size:30px; font-weight:600; letter-spacing:-.02em; line-height:1.1; margin-top:4px}
+.dg .big small{font-size:15px; font-weight:500; color:var(--ink-2); margin-left:4px}
+.dg .msg{font-size:14.5px; color:var(--ink-2); line-height:1.5; margin-top:3px}
+.pill-ok{background:rgba(12,163,12,.15); color:var(--good-ink)}
+.pill-warn{background:rgba(250,178,25,.22); color:var(--warn-ink)}
+.pill-bad{background:rgba(208,59,59,.15); color:var(--crit-ink)}
+
+/* camp strip */
+.camp{border:1px solid var(--hair); border-radius:11px; padding:13px 14px; background:var(--surface-2)}
+.camp-h{display:flex; align-items:center; gap:9px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.camp-n{margin:0; font-size:16px; font-weight:600}
+.camp-t{margin-left:auto; font-size:12.5px; font-weight:600; padding:2px 9px; border-radius:999px}
+.camp-rows{margin:9px 0 0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:14.5px}
+.camp-rows dt{color:var(--ink-2); margin:0}
+.camp-rows dd{margin:0; text-align:right; color:var(--ink-2);
+  font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+
+/* task list */
+.task{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:13px; align-items:start;
+  padding:13px 0; border-top:1px solid var(--grid)}
+.task:first-of-type{border-top:none; padding-top:2px}
+.tno{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:none;color:#fff;
+  font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:700;margin-top:1px}
+.task p{margin:0; font-size:15px; line-height:1.5}
+.task p b{font-size:16px}
+.task .due{font-size:13px; color:var(--ink-2); white-space:nowrap; text-align:right; line-height:1.35}
+.task .due b{display:block; font-size:17px; font-family:"IBM Plex Mono",monospace}
+
+/* legend + charts */
+.legend{display:flex; gap:17px; flex-wrap:wrap; font-size:14.5px; font-weight:500;
+  color:var(--ink-2); margin:0 0 11px}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.sw{width:13px;height:13px;border-radius:4px;flex:none}
+.sw.ln{height:3px;width:18px;border-radius:2px}
+.sw.dsh{height:0;width:20px;border-radius:0;background:none !important;
+  border-top:3px dashed var(--muted); opacity:.75}
+.chartbox{position:relative; overflow-x:auto}
+svg{display:block; max-width:100%}
+.tt{position:absolute; pointer-events:none; opacity:0; transition:opacity .09s; z-index:9;
+  background:var(--surface); border:1px solid var(--hair); border-radius:9px; padding:9px 11px;
+  font-size:14px; box-shadow:0 6px 22px -8px rgba(0,0,0,.45); min-width:150px}
+.tt h4{margin:0 0 5px; font-size:15px; font-weight:600}
+.tt .r{display:flex; justify-content:space-between; gap:10px; color:var(--ink-2)}
+.tt .r b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+.tt .r i{width:10px;height:10px;border-radius:3px;flex:none;font-style:normal;margin-right:6px}
+.tt .n{margin-top:6px; padding-top:5px; border-top:1px solid var(--grid); color:var(--ink-2); font-size:13px}
+
+/* heartbeat */
+.hb{display:grid; gap:4px; align-items:center; min-width:400px}
+.hbweek{font-size:12.5px; color:var(--ink-2); text-align:center; font-family:"IBM Plex Mono",monospace}
+.hbname{font-size:14.5px; color:var(--ink-2); padding-right:8px; white-space:nowrap; font-weight:500}
+.hb-c{height:30px; border-radius:5px; border:1px solid transparent}
+.hb-R{background:rgba(12,163,12,.72)} .hb-Z{background:rgba(12,163,12,.2); border-color:rgba(12,163,12,.5)}
+.hb-L{background:var(--warning)} .hb-X{background:var(--critical)}
+.hbkey{display:flex; gap:16px; flex-wrap:wrap; font-size:14px; color:var(--ink-2); margin-top:12px}
+.hbkey span{display:inline-flex; align-items:center; gap:7px}
+.hbkey i{width:14px;height:14px;border-radius:4px;display:block;border:1px solid transparent}
+
+/* indicator rows */
+.indgrp{margin-top:4px}
+.indgrp > h3{margin:16px 0 8px; font-size:14px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); font-weight:600}
+.ind{border-top:1px solid var(--grid); padding:11px 0 10px}
+.ind:first-of-type{border-top:none}
+.ind-h{display:flex; align-items:baseline; gap:9px; margin-bottom:7px; flex-wrap:wrap}
+.ind-n{font-size:15.5px; font-weight:500}
+.ind-t{margin-left:auto; font-size:13.5px; color:var(--ink-2); white-space:nowrap}
+.ind-d{font-size:12px; font-weight:600; color:var(--ink-2); border:1px solid var(--hair);
+  padding:1px 7px; border-radius:5px}
+
+/* tables */
+details.tv{margin-top:13px}
+details.tv summary{font-size:14.5px; color:var(--accent); cursor:pointer; font-weight:600; width:fit-content}
+details.tv summary:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.tw{overflow-x:auto; margin-top:10px}
+table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:420px}
+th,td{padding:7px 11px; text-align:right; border-bottom:1px solid var(--grid); white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{color:var(--ink-2); font-weight:600; font-size:13.5px; background:var(--surface-2)}
+tbody td{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink-2)}
+tbody td:first-child{font-family:inherit; color:var(--ink)}
+.tag{font-size:12.5px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap}
+
+footer{margin-top:10px; padding-top:16px; border-top:1px solid var(--hair);
+  font-size:14px; color:var(--ink-2); line-height:1.65}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="mark">TAK</div>
+      <div><b>คอนโซลเฝ้าระวัง</b><span>ศูนย์พักพิงชั่วคราว จ.ตาก</span></div>
+    </div>
+    <nav id="nav" aria-label="มุมมอง">
+      <p class="nav-h">สถานะ</p>
+      <button data-v="overview" aria-current="true"><i></i>ภาพรวม</button>
+      <p class="nav-h">กลุ่มโรคเฟส 1</p>
+      <button data-v="mch"><i></i>อนามัยแม่และเด็ก</button>
+      <button data-v="gi"><i></i>โรคติดเชื้อทางเดินอาหาร</button>
+      <button data-v="ncd"><i></i>โรคไม่ติดต่อเรื้อรัง</button>
+      <p class="nav-h">ระบบ</p>
+      <button data-v="dq"><i></i>คุณภาพข้อมูล</button>
+    </nav>
+    <div class="rail-foot">นิยามตัวชี้วัดตาม WHO EWARN และ UNHCR Standards and Indicators Guide 2019</div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <h1 class="vtitle" id="vtitle">ภาพรวม<small id="vsub"></small></h1>
+      <div class="seg" id="campseg" role="group" aria-label="ศูนย์พักพิง">
+        <button data-camp="ALL" aria-pressed="true">ทุกศูนย์</button>
+        <button data-camp="MAELA" aria-pressed="false">แม่หละ</button>
+        <button data-camp="UMPIEM" aria-pressed="false">อุ้มเปี้ยม</button>
+        <button data-camp="NUPO" aria-pressed="false">นุโพ</button>
+      </div>
+      <div class="seg zoomer" role="group" aria-label="ขนาดตัวอักษร">
+        <button data-z="1" aria-pressed="false" title="ปกติ">ก</button>
+        <button data-z="1.12" aria-pressed="true" title="ใหญ่">ก</button>
+        <button data-z="1.28" aria-pressed="false" title="ใหญ่พิเศษ">ก</button>
+      </div>
+      <div class="asof">ข้อมูล ณ <b>สัปดาห์ระบาดวิทยาที่ 34</b><br>17–23 สิงหาคม 2569</div>
+    </header>
+    <div class="mockbar"><b>ต้นแบบ — ตัวเลขทั้งหมดเป็นข้อมูลจำลอง</b> สำหรับทบทวนโครงสร้างหน้าจอและนิยามตัวชี้วัดก่อนพัฒนา ยังไม่ได้เชื่อมกับ Hospital OS ของศูนย์พักพิง</div>
+    <div class="view" id="view"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ═══════════════ ข้อมูลจำลอง ═══════════════ */
+const WEEKS=[22,23,24,25,26,27,28,29,30,31,32,33,34];
+const MONTHS=["ก.ย.","ต.ค.","พ.ย.","ธ.ค.","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค."];
+const QTRS=["Q3/68","Q4/68","Q1/69","Q2/69","Q3/69","Q4/69"];
+
+const CONDS=[
+ {k:"AWD",  n:"อุจจาระร่วงเฉียบพลัน", v:"--d1"},
+ {k:"BD",   n:"อุจจาระร่วงมีเลือดปน",  v:"--d2"},
+ {k:"HEPA", n:"ตับอักเสบเอ",           v:"--d3"},
+ {k:"TYPH", n:"สงสัยไข้ไทฟอยด์",       v:"--d4"}];
+
+const CAMPS=[
+{id:"MAELA",name:"แม่หละ",v:"--c1",pop:38420,consult:1842,newv:786,
+ gi:{AWD:[48,52,45,51,58,49,55,62,57,66,74,96,118],BD:[5,4,4,5,6,5,6,6,5,7,7,9,11],
+     HEPA:[2,3,2,2,2,2,2,3,3,2,3,4,4],TYPH:[1,1,1,1,1,1,1,1,1,1,1,1,2]},
+ zones:[["Z-04",34],["Z-11",27],["Z-02",19],["Z-07",15],["Z-09",11],["Z-01",8],["Z-05",6],["Z-12",3]],
+ report:"RRRRRRRRRRRRR", dq:[94.2,97.8,91.0,88.0,99.9],
+ sync:{ch:"API",last:"26 ส.ค. 08:14",q:0,st:"ปกติ",cls:"pill-ok",power:"ไฟฟ้าส่วนภูมิภาค",staff:3},
+ ncd:{casc:[412,337,298,168],ltfu:12,stock:1,ctrlQ:[31,33,35,37,39,40.8],
+      byDx:[["ความดันโลหิตสูง",264,112],["เบาหวาน",93,38],["ทั้งสองโรค",55,18]]},
+ mch:{births:118,anc1:71,anc4:82,tt:88,hiv:96,syph:94,sba:96,cs:9.2,lbw:11.2,pnc:74,
+      mmr:93,drop:6.2,gmp:92,gam:7.1,sam:1.2,nmr:8.4,
+      trend:{anc1:[62,63,64,66,66,67,68,69,70,70,71,71],sba:[91,92,92,93,94,94,95,95,95,96,96,96],
+             mmr:[88,88,89,90,90,91,91,92,92,93,93,93],lbw:[13.1,12.9,12.6,12.4,12.2,12.0,11.8,11.7,11.5,11.4,11.3,11.2]}},
+ alerts:[
+  {sev:"warning",cond:"AWD",ttl:"อุจจาระร่วงเฉียบพลัน",
+   l1:"118 ราย ในสัปดาห์ที่ 34 · เกณฑ์ UNHCR 1.5 เท่าของค่าเฉลี่ย 3 สัปดาห์ (เกณฑ์ 118 ราย)",
+   l2:'พบผู้ป่วย 22 ส.ค. 09:10 · <code>กำลังสอบสวน</code> · ส่งตรวจแล้ว 12 ตัวอย่าง ผลยังไม่ออก',
+   sla:"near",big:"17 ชม.",small:"คงเหลือ",ok:true},
+  {sev:"good",cond:"MEASLES",ttl:"สงสัยโรคหัด",
+   l1:"1 ราย เด็กอายุ 3 ปี โซน Z-11 · เกณฑ์ WHO/UNHCR 1 ราย แจ้งเตือนทันที",
+   l2:'พบผู้ป่วย 16 ส.ค. 11:25 · <code>ยืนยันแล้ว</code> · ไม่เคยได้รับวัคซีน เร่งค้นหาผู้สัมผัสในโซนเดียวกัน',
+   sla:"okk",big:"11 ชม.",small:"ใช้ไป",ok:true}],
+ err:[["V-03","รหัส ICD-10 ไม่ถูกรูปแบบหรือไม่มีในบัญชี",8,"ERROR"],
+      ["C-02","การมารับบริการที่ไม่มีการวินิจฉัย",3,"ERROR"],
+      ["T-03","คีย์ข้อมูลย้อนหลังเกิน 7 วัน",11,"WARNING"],
+      ["X-09","อายุกับวันที่ให้วัคซีนไม่สอดคล้องกัน",2,"WARNING"]],
+ ll:[["S-2569-0412","P7K2…8V3C","5+","ญ","AWD","18 ส.ค.","20 ส.ค.","SUSPECTED","PENDING",true],
+     ["S-2569-0418","P8N4…5K1D","0-4","ญ","MEASLES","14 ส.ค.","16 ส.ค.","CONFIRMED","POSITIVE",true],
+     ["S-2569-0425","P5T1…3W8H","5+","ญ","AWD","21 ส.ค.","22 ส.ค.","SUSPECTED","PENDING",true]]},
+
+{id:"UMPIEM",name:"อุ้มเปี้ยม",v:"--c2",pop:11560,consult:612,newv:258,
+ gi:{AWD:[18,15,21,17,19,22,16,20,18,23,21,19,24],BD:[1,1,2,1,2,1,1,2,1,2,2,2,6],
+     HEPA:[1,0,1,1,0,1,1,0,1,1,0,1,1],TYPH:[0,0,1,0,0,0,1,0,0,0,1,0,0]},
+ zones:[["Z-07",12],["Z-03",7],["Z-01",5],["Z-05",4],["Z-02",2],["Z-08",1]],
+ report:"RRRRZRRRRRRRR", dq:[91.5,96.4,89.2,82.5,99.7],
+ sync:{ch:"API",last:"26 ส.ค. 06:52",q:14,st:"ล่าช้า",cls:"pill-warn",power:"ไฟฟ้าส่วนภูมิภาค",staff:2},
+ ncd:{casc:[148,121,102,54],ltfu:19,stock:2,ctrlQ:[28,29,31,33,35,36.5],
+      byDx:[["ความดันโลหิตสูง",94,36],["เบาหวาน",36,13],["ทั้งสองโรค",18,5]]},
+ mch:{births:31,anc1:64,anc4:76,tt:81,hiv:93,syph:90,sba:91,cs:7.8,lbw:13.8,pnc:68,
+      mmr:89,drop:8.1,gmp:88,gam:8.4,sam:1.6,nmr:10.2,
+      trend:{anc1:[57,58,58,59,60,61,61,62,63,63,64,64],sba:[86,87,88,88,89,89,90,90,90,91,91,91],
+             mmr:[83,84,85,85,86,87,87,88,88,89,89,89],lbw:[15.2,15.0,14.8,14.6,14.5,14.3,14.2,14.1,14.0,13.9,13.8,13.8]}},
+ alerts:[
+  {sev:"good",cond:"BD",ttl:"อุจจาระร่วงมีเลือดปน",
+   l1:"6 ราย โซน Z-07 ภายใน 1 วัน · เกณฑ์ WHO/UNHCR 5 ราย ในจุดเดียวกันภายใน 1 วัน",
+   l2:'พบผู้ป่วย 24 ส.ค. 14:20 · <code>ยืนยันแล้ว</code> · ผลเพาะเชื้อพบ <i>Shigella flexneri</i> 2 ราย',
+   sla:"okk",big:"18 ชม.",small:"ใช้ไป",ok:true}],
+ err:[["V-03","รหัส ICD-10 ไม่ถูกรูปแบบหรือไม่มีในบัญชี",6,"ERROR"],
+      ["C-03","น้ำหนักแรกเกิดว่าง ทั้งที่ทารกเกิดมีชีพ",2,"ERROR"],
+      ["T-03","คีย์ข้อมูลย้อนหลังเกิน 7 วัน",9,"WARNING"],
+      ["U-03","สงสัยผู้ป่วยซ้ำภายใน 14 วัน",3,"WARNING"]],
+ ll:[["S-2569-0207","U4B7…1Q6M","5+","ช","BD","22 ส.ค.","24 ส.ค.","CONFIRMED","POSITIVE",true],
+     ["S-2569-0208","U9C2…7Z3N","0-4","ญ","BD","23 ส.ค.","24 ส.ค.","CONFIRMED","POSITIVE",true],
+     ["S-2569-0209","U1D8…4Y9P","5+","ญ","BD","23 ส.ค.","24 ส.ค.","SUSPECTED","PENDING",true]]},
+
+{id:"NUPO",name:"นุโพ",v:"--c3",pop:9180,consult:393,newv:162,
+ gi:{AWD:[12,14,11,16,13,15,18,14,17,16,19,22,20],BD:[1,2,1,2,1,2,2,1,2,2,2,3,2],
+     HEPA:[0,1,0,1,1,0,1,1,0,1,1,1,1],TYPH:[1,0,1,1,2,1,2,1,2,3,5,9,4]},
+ zones:[["Z-02",11],["Z-05",8],["Z-01",4],["Z-03",3],["Z-06",1]],
+ report:"RXRRLRRXRRXLR", dq:[82.0,93.1,84.6,41.0,99.5],
+ sync:{ch:"Offline batch",last:"21 ส.ค. 20:15",q:1284,st:"ขาดการเชื่อมต่อ",cls:"pill-bad",
+       power:"โซลาร์ + เครื่องปั่นไฟ",staff:1},
+ ncd:{casc:[96,61,44,19],ltfu:40,stock:4,ctrlQ:[22,21,20,20,19,19.8],
+      byDx:[["ความดันโลหิตสูง",61,13],["เบาหวาน",24,4],["ทั้งสองโรค",11,2]]},
+ mch:{births:24,anc1:48,anc4:55,tt:62,hiv:80,syph:76,sba:73,cs:4.1,lbw:18.4,pnc:51,
+      mmr:78,drop:14.5,gmp:79,gam:11.2,sam:2.4,nmr:14.6,
+      trend:{anc1:[44,44,45,45,46,46,47,47,47,48,48,48],sba:[70,70,71,71,72,72,72,73,73,73,73,73],
+             mmr:[73,73,74,74,75,75,76,76,77,77,78,78],lbw:[19.8,19.6,19.4,19.2,19.1,18.9,18.8,18.7,18.6,18.5,18.4,18.4]}},
+ alerts:[
+  {sev:"critical",cond:"TYPH",ttl:"สงสัยไข้ไทฟอยด์",
+   l1:"9 ราย ในสัปดาห์ที่ 33 · เกณฑ์เฉพาะพื้นที่ 2 เท่าของค่าเฉลี่ย 3 สัปดาห์ (เกณฑ์ 8 ราย)",
+   l2:'พบผู้ป่วย 19 ส.ค. 10:40 · <code>ยังไม่ยืนยัน</code> · ยังไม่ได้ส่งตรวจเพาะเชื้อ',
+   sla:"over",big:"+152 ชม.",small:"เกินกำหนด",ok:false}],
+ err:[["T-03","คีย์ข้อมูลย้อนหลังเกิน 7 วัน",47,"WARNING"],
+      ["V-03","รหัส ICD-10 ไม่ถูกรูปแบบหรือไม่มีในบัญชี",21,"ERROR"],
+      ["C-04","ไม่มีค่าความดันโลหิตในผู้ป่วยความดันสูง",12,"ERROR"],
+      ["T-01","ส่งข้อมูลเฝ้าระวังเกิน 48 ชั่วโมง",5,"KPI"],
+      ["C-01","ไม่ได้ส่งรายงานรายสัปดาห์",3,"ERROR"]],
+ ll:[["S-2569-0088","N6E3…8T2R","5+","ช","TYPH","15 ส.ค.","19 ส.ค.","SUSPECTED","NOT_TESTED",false],
+     ["S-2569-0089","N2F9…5U7S","5+","ญ","TYPH","16 ส.ค.","19 ส.ค.","SUSPECTED","NOT_TESTED",false],
+     ["S-2569-0090","N7G4…2V1T","0-4","ช","AWD","18 ส.ค.","21 ส.ค.","SUSPECTED","NOT_TESTED",false]]}];
+
+const MCHIND=[
+ {g:"การฝากครรภ์",k:"anc1",n:"ฝากครรภ์ครั้งแรกเมื่ออายุครรภ์ ≤ 12 สัปดาห์",t:100,u:"%",hi:true},
+ {g:"การฝากครรภ์",k:"anc4",n:"ฝากครรภ์ครบ 4 ครั้งตามเกณฑ์",t:100,u:"%",hi:true},
+ {g:"การฝากครรภ์",k:"tt",n:"ได้รับวัคซีนบาดทะยักครบตามเกณฑ์",t:100,u:"%",hi:true},
+ {g:"การฝากครรภ์",k:"hiv",n:"ตรวจ HIV ในหญิงฝากครรภ์",t:100,u:"%",hi:true},
+ {g:"การฝากครรภ์",k:"syph",n:"ตรวจซิฟิลิสในหญิงฝากครรภ์",t:100,u:"%",hi:true},
+ {g:"การคลอดและหลังคลอด",k:"sba",n:"คลอดโดยบุคลากรที่มีทักษะ",t:100,u:"%",hi:true},
+ {g:"การคลอดและหลังคลอด",k:"cs",n:"อัตราการผ่าตัดคลอด",t:15,u:"%",hi:false,lo:5},
+ {g:"การคลอดและหลังคลอด",k:"lbw",n:"ทารกแรกเกิดน้ำหนักน้อยกว่า 2,500 กรัม",t:15,u:"%",hi:false},
+ {g:"การคลอดและหลังคลอด",k:"pnc",n:"ดูแลหลังคลอดครบ 3 ครั้งใน 6 สัปดาห์",t:100,u:"%",hi:true},
+ {g:"การคลอดและหลังคลอด",k:"nmr",n:"อัตราตายทารกแรกเกิดต่อ 1,000 การเกิดมีชีพ",t:12,u:"",hi:false},
+ {g:"วัคซีน",k:"mmr",n:"ความครอบคลุมวัคซีนหัด",t:95,u:"%",hi:true},
+ {g:"วัคซีน",k:"drop",n:"อัตราหลุดจากโปรแกรมวัคซีน (เข็ม 1 → เข็ม 3)",t:10,u:"%",hi:false},
+ {g:"โภชนาการ",k:"gmp",n:"ความครอบคลุมการเฝ้าระวังการเจริญเติบโต",t:90,u:"%",hi:true},
+ {g:"โภชนาการ",k:"gam",n:"ภาวะทุพโภชนาการเฉียบพลันรวม (GAM)",t:10,u:"%",hi:false},
+ {g:"โภชนาการ",k:"sam",n:"ภาวะทุพโภชนาการเฉียบพลันรุนแรง (SAM)",t:2,u:"%",hi:false}];
+
+const MCHTREND=[{k:"anc1",n:"ฝากครรภ์ครั้งแรก ≤ 12 สัปดาห์",t:100,hi:true},
+ {k:"sba",n:"คลอดโดยบุคลากรมีทักษะ",t:100,hi:true},
+ {k:"mmr",n:"ความครอบคลุมวัคซีนหัด",t:95,hi:true},
+ {k:"lbw",n:"ทารกน้ำหนักน้อยกว่า 2,500 ก.",t:15,hi:false}];
+
+const DQD=["ความครบถ้วน","ความถูกต้อง","ความสอดคล้อง","ความทันเวลา","ความไม่ซ้ำซ้อน"];
+const DQDL=[["ความ","ครบถ้วน"],["ความ","ถูกต้อง"],["ความ","สอดคล้อง"],["ความ","ทันเวลา"],["ความ","ไม่ซ้ำซ้อน"]];
+const DQW=[30,25,20,15,10];
+const STAGES=["ขึ้นทะเบียน","ได้รับยาต่อเนื่อง","วัดความดันใน 90 วัน","ควบคุมได้"];
+const STAGEL=[["ขึ้นทะเบียน"],["ได้รับยา","ต่อเนื่อง"],["วัดความดัน","ใน 90 วัน"],["ควบคุมได้"]];
+const HBT={R:"ส่งแล้ว",Z:"รายงานว่าไม่มีผู้ป่วย",L:"ส่งช้ากว่ากำหนด",X:"ไม่ได้ส่ง"};
+
+/* ═══════════════ ตัวช่วย ═══════════════ */
+let view="overview", camp="ALL";
+const L=()=>camp==="ALL"?CAMPS:CAMPS.filter(c=>c.id===camp);
+const cv=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt=(n,d)=>n.toLocaleString("th-TH",{minimumFractionDigits:d,maximumFractionDigits:d});
+const num=n=>n.toLocaleString("th-TH");
+const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};
+const cnt=(s,ch)=>s.split("").filter(x=>ch.includes(x)).length;
+const dqTot=c=>c.dq.reduce((s,v,i)=>s+v*DQW[i]/100,0);
+const grade=t=>t>=90?"A":t>=80?"B":t>=70?"C":"D";
+const pop=()=>sum(L(),c=>c.pop);
+const giW=(c,i)=>CONDS.reduce((s,k)=>s+c.gi[k.k][i],0);
+const giAll=i=>sum(L(),c=>giW(c,i));
+const awdAll=i=>sum(L(),c=>c.gi.AWD[i]);
+const alerts=()=>L().flatMap(c=>c.alerts.map(a=>({...a,camp:c.name})));
+const wavg=k=>sum(L(),c=>c.mch[k]*c.pop)/pop();
+
+function tip(box){ const d=document.createElement("div"); d.className="tt"; box.appendChild(d); return d; }
+function showTip(tt,box,x,y,html){
+  tt.innerHTML=html; tt.style.opacity=1;
+  const r=box.getBoundingClientRect();
+  let lx=x-r.left+14; if(lx+230>r.width) lx-=258;
+  tt.style.left=Math.max(0,lx)+"px"; tt.style.top=Math.max(0,y-r.top-34)+"px";
+}
+function mkSvg(box,H,minW){
+  const W=Math.max(minW||420,Math.floor(box.clientWidth||620));
+  const s=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",height:H});
+  s.style.minWidth=W+"px"; box.appendChild(s); return {s,W,H};
+}
+function gridY(s,m,iw,ih,max,suffix,steps){
+  steps=steps||4;
+  for(let g=0;g<=steps;g++){
+    const v=max*g/steps, y=m.t+ih-(v/max)*ih;
+    s.appendChild(el("line",{x1:m.l,x2:m.l+iw,y1:y,y2:y,stroke:cv(g?"--grid":"--axis")}));
+    const t=el("text",{x:m.l-10,y:y+5,"text-anchor":"end","font-size":14,"font-weight":500,
+      fill:cv("--ink-2"),"font-family":'"IBM Plex Mono",monospace'});
+    t.textContent=(max>=20?Math.round(v):fmt(v,1))+(suffix||""); s.appendChild(t);
+  }
+}
+function legend(id,items){ const e=document.getElementById(id); if(!e) return;
+  e.innerHTML=items.map(i=>`<span><i class="sw${i.line?" ln":""}${i.dash?" dsh":""}" style="background:${cv(i.v)}"></i>${i.n}</span>`).join(""); }
+function campLegend(){ return L().map(c=>({n:c.name,v:c.v})); }
+function table(id,head,rows){ const e=document.getElementById(id); if(!e) return;
+  e.innerHTML="<table><thead><tr>"+head.map(h=>`<th>${h}</th>`).join("")+"</tr></thead><tbody>"+
+    rows.map(r=>"<tr>"+r.map(c=>`<td>${c}</td>`).join("")+"</tr>").join("")+"</tbody></table>"; }
+
+/* ═══════════════ ชิ้นส่วนกราฟ ═══════════════ */
+function stackedBars(box,cats,series,labels,note){
+  box.innerHTML=""; const tt=tip(box);
+  const {s,W,H}=mkSvg(box,330,480), m={t:18,r:16,b:46,l:56};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  const tot=cats.map((_,i)=>series.reduce((a,se)=>a+se.v[i],0));
+  let max=Math.max(...tot,1); max=Math.ceil(max*1.12/10)*10;
+  gridY(s,m,iw,ih,max);
+  const bw=Math.min(40,iw/cats.length*0.68);
+  cats.forEach((cat,i)=>{
+    const cx=m.l+iw*(i+0.5)/cats.length; let acc=0;
+    series.forEach(se=>{
+      const v=se.v[i]; if(!v) {acc+=v; return;}
+      const y0=m.t+ih-(acc/max)*ih, y1=m.t+ih-((acc+v)/max)*ih;
+      const r=el("rect",{x:cx-bw/2,y:y1,width:bw,height:Math.max(1,y0-y1-2),rx:3,fill:cv(se.v2)});
+      r.addEventListener("mouseenter",ev=>showTip(tt,box,ev.clientX,ev.clientY,
+        `<h4>${labels[i]}</h4>`+series.map(x=>`<div class="r"><span><i style="background:${cv(x.v2)}"></i>${x.n}</span><b>${x.v[i]}</b></div>`).join("")+
+        `<div class="n">รวม ${tot[i]} ราย</div>`));
+      r.addEventListener("mouseleave",()=>tt.style.opacity=0);
+      s.appendChild(r); acc+=v;
+    });
+    if(i%2===0||cats.length<=8){
+      const t=el("text",{x:cx,y:H-16,"text-anchor":"middle","font-size":14,"font-weight":500,
+        fill:cv("--ink-2"),"font-family":'"IBM Plex Mono",monospace'});
+      t.textContent=labels[i]; s.appendChild(t);
+    }
+  });
+  if(note){ const t=el("text",{x:m.l,y:H-2,"font-size":13,fill:cv("--muted")}); t.textContent=note; s.appendChild(t); }
+}
+
+function groupedBars(box,cats,series,opt){
+  opt=opt||{}; box.innerHTML=""; const tt=tip(box);
+  const {s,W,H}=mkSvg(box,opt.h||320,460), m={t:18,r:16,b:opt.b||52,l:58};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  let max=opt.max||Math.max(...series.flatMap(x=>x.v),1); max=opt.max||Math.ceil(max*1.1/10)*10;
+  gridY(s,m,iw,ih,max,opt.suffix);
+  const gw=iw/cats.length, bw=Math.min(opt.bw||52,(gw-26)/series.length);
+  const maxLines=Math.max(...cats.map(c=>Array.isArray(c)?c.length:1));
+  cats.forEach((cat,i)=>{
+    const cx=m.l+gw*i+gw/2;
+    series.forEach((se,j)=>{
+      const v=se.v[i], h=(v/max)*ih;
+      const bx=cx-(series.length*(bw+3)-3)/2+j*(bw+3);
+      const r=el("rect",{x:bx,y:m.t+ih-h,width:bw,height:Math.max(1,h),rx:4,fill:cv(se.v2),
+        stroke:cv("--surface"),"stroke-width":2});
+      r.addEventListener("mouseenter",ev=>showTip(tt,box,ev.clientX,ev.clientY,
+        `<h4>${se.n}</h4><div class="r"><span>${Array.isArray(cat)?cat.join(""):cat}</span><b>${fmt(v,v%1?1:0)}${opt.suffix||""}</b></div>`+
+        (opt.note?`<div class="n">${opt.note(i,j)}</div>`:"")));
+      r.addEventListener("mouseleave",()=>tt.style.opacity=0);
+      s.appendChild(r);
+    });
+    const lines=Array.isArray(cat)?cat:[cat];
+    let fs=15;
+    const wide=Math.max(...lines.map(l=>l.length))*0.60*fs;
+    if(wide>gw-10) fs=Math.max(11,fs*(gw-10)/wide);
+    const y0=H-(opt.b?opt.b-28:24)-(maxLines-1)*(fs+3);
+    lines.forEach((ln,k)=>{
+      const t=el("text",{x:cx,y:y0+k*(fs+3),"text-anchor":"middle","font-size":fs,
+        "font-weight":500,fill:cv("--ink")});
+      t.textContent=ln; s.appendChild(t);
+    });
+  });
+}
+
+function lineChart(box,xs,series,opt){
+  opt=opt||{}; box.innerHTML=""; const tt=tip(box);
+  const {s,W,H}=mkSvg(box,opt.h||320,460), m={t:18,r:opt.r||84,b:44,l:58};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  let lo=opt.lo!==undefined?opt.lo:0, hi=opt.hi||Math.max(...series.flatMap(x=>x.v))*1.12;
+  let NT=4;
+  if(opt.nice!==false){ // ปัดช่วงแกน Y ให้เป็นเลขกลม และเลือกจำนวนเส้นกริดที่พอดีที่สุด
+    const vals=series.flatMap(x=>x.v);
+    const need=Math.max(...vals,opt.target!==undefined?opt.target:-Infinity);
+    const base=Math.max(0,Math.min(lo,...vals));
+    const steps=[];
+    for(let e=-2;e<=6;e++) [1,2,2.5,5].forEach(x=>steps.push(x*Math.pow(10,e)));
+    steps.sort((a,b)=>a-b);
+    let best=null;
+    [4,5].forEach(n=>{
+      const st=steps.find(x=>Math.floor(base/x)*x+n*x>=need-1e-9);
+      if(!st) return;
+      const l0=Math.floor(base/st)*st, h0=l0+n*st;
+      if(!best||h0-need<best.h-need-1e-9) best={l:l0,h:h0,n};
+    });
+    if(best){ lo=best.l; hi=best.h; NT=best.n; }
+  }
+  const X=i=>m.l+iw*i/(xs.length-1), Y=v=>m.t+ih-((v-lo)/(hi-lo))*ih;
+  for(let g=0;g<=NT;g++){ const v=lo+(hi-lo)*g/NT;
+    s.appendChild(el("line",{x1:m.l,x2:m.l+iw,y1:Y(v),y2:Y(v),stroke:cv(g?"--grid":"--axis")}));
+    const t=el("text",{x:m.l-10,y:Y(v)+5,"text-anchor":"end","font-size":14,"font-weight":500,
+      fill:cv("--ink-2"),"font-family":'"IBM Plex Mono",monospace'});
+    t.textContent=fmt(v,Math.abs(v%1)>1e-9?1:0)+(opt.suffix||""); s.appendChild(t); }
+  if(opt.target!==undefined && opt.target<=hi){
+    s.appendChild(el("line",{x1:m.l,x2:m.l+iw,y1:Y(opt.target),y2:Y(opt.target),
+      stroke:cv("--ink"),"stroke-width":2,"stroke-dasharray":"5 4"}));
+    const t=el("text",{x:m.l+iw-2,y:Y(opt.target)-7,"text-anchor":"end","font-size":13,
+      "font-weight":600,fill:cv("--ink")}); t.textContent="เป้า "+opt.target+(opt.suffix||""); s.appendChild(t);
+  }
+  xs.forEach((x,i)=>{ if(xs.length>8&&i%2) return;
+    const t=el("text",{x:X(i),y:H-14,"text-anchor":"middle","font-size":14,"font-weight":500,
+      fill:cv("--ink-2")}); t.textContent=x; s.appendChild(t); });
+  const ends=[];
+  series.forEach(se=>{
+    const col=cv(se.v2), pts=se.v.map((v,i)=>[X(i),Y(v)]);
+    if(se.dash) s.appendChild(el("polyline",{points:pts.map(p=>p.join(",")).join(" "),fill:"none",
+      stroke:col,"stroke-width":1.6,"stroke-dasharray":"3 4","stroke-opacity":.6}));
+    else {
+      s.appendChild(el("polyline",{points:pts.map(p=>p.join(",")).join(" "),fill:"none",stroke:col,
+        "stroke-width":2.4,"stroke-linejoin":"round","stroke-linecap":"round"}));
+      const e=pts[pts.length-1];
+      s.appendChild(el("circle",{cx:e[0],cy:e[1],r:5.5,fill:col,stroke:cv("--surface"),"stroke-width":2}));
+      if(opt.r!==0) ends.push({n:se.n,x:e[0],y:e[1],ly:e[1]});
+    }
+  });
+  ends.sort((a,b)=>a.ly-b.ly);
+  for(let i=1;i<ends.length;i++) if(ends[i].ly-ends[i-1].ly<20) ends[i].ly=ends[i-1].ly+20;
+  const ov=ends.length?ends[ends.length-1].ly-(m.t+ih):0;
+  if(ov>0) ends.forEach(e=>e.ly-=ov);
+  ends.forEach(e=>{ const t=el("text",{x:e.x+11,y:e.ly,"font-size":14.5,"font-weight":600,
+    fill:cv("--ink"),"dominant-baseline":"middle"}); t.textContent=e.n; s.appendChild(t); });
+  const hv=el("line",{y1:m.t,y2:m.t+ih,stroke:cv("--axis"),opacity:0}); s.appendChild(hv);
+  const hit=el("rect",{x:m.l,y:m.t,width:iw,height:ih,fill:"transparent"}); s.appendChild(hit);
+  hit.addEventListener("mousemove",ev=>{
+    const b=s.getBoundingClientRect();
+    let i=Math.round(((ev.clientX-b.left)/b.width*W-m.l)/(iw/(xs.length-1)));
+    i=Math.max(0,Math.min(xs.length-1,i));
+    hv.setAttribute("x1",X(i)); hv.setAttribute("x2",X(i)); hv.setAttribute("opacity",1);
+    showTip(tt,box,ev.clientX,ev.clientY,`<h4>${opt.xlab?opt.xlab(i):xs[i]}</h4>`+
+      series.filter(x=>!x.dash).map(x=>`<div class="r"><span><i style="background:${cv(x.v2)}"></i>${x.n}</span><b>${fmt(x.v[i],x.v[i]%1?2:0)}${opt.suffix||""}</b></div>`).join("")+
+      (opt.tnote?`<div class="n">${opt.tnote}</div>`:""));
+  });
+  hit.addEventListener("mouseleave",()=>{tt.style.opacity=0;hv.setAttribute("opacity",0);});
+}
+
+function hBars(box,rows,opt){
+  opt=opt||{}; box.innerHTML=""; const tt=tip(box);
+  const RH=34, H=rows.length*RH+14;
+  const {s,W}=mkSvg(box,H,360), LW=78, VW=rows.some(r=>r.hot)?150:84, TRK=W-LW-VW;
+  const max=Math.max(...rows.map(r=>r.v),1);
+  rows.forEach((r,i)=>{
+    const y=i*RH+8;
+    const lb=el("text",{x:0,y:y+17,"font-size":14.5,"font-weight":500,fill:cv("--ink-2"),
+      "font-family":'"IBM Plex Mono",monospace'}); lb.textContent=r.n; s.appendChild(lb);
+    s.appendChild(el("rect",{x:LW,y:y+2,width:TRK,height:22,rx:5,fill:cv("--grid")}));
+    const bar=el("rect",{x:LW,y:y+2,width:Math.max(3,r.v/max*TRK),height:22,rx:5,
+      fill:cv(r.hot?"--d4":"--c1")});
+    bar.addEventListener("mouseenter",ev=>showTip(tt,box,ev.clientX,ev.clientY,
+      `<h4>โซน ${r.n}</h4><div class="r"><span>ผู้ป่วยกลุ่มทางเดินอาหาร</span><b>${r.v} ราย</b></div>`+
+      (r.hot?`<div class="n">โซนที่มีการแจ้งเตือนเปิดอยู่</div>`:"")));
+    bar.addEventListener("mouseleave",()=>tt.style.opacity=0);
+    s.appendChild(bar);
+    const vt=el("text",{x:LW+Math.max(3,r.v/max*TRK)+10,y:y+18,"font-size":15,"font-weight":700,
+      fill:cv("--ink"),"font-family":'"IBM Plex Mono",monospace'}); vt.textContent=r.v; s.appendChild(vt);
+    if(r.hot){
+      const fl=el("text",{x:W,y:y+18,"text-anchor":"end","font-size":13,"font-weight":700,
+        fill:cv("--crit-ink")}); fl.textContent="▲ แจ้งเตือน"; s.appendChild(fl);
+    }
+  });
+}
+
+function bulletRows(host,inds,getter){
+  const list=L();
+  host.innerHTML="";
+  let lastG=null;
+  inds.forEach(ind=>{
+    if(ind.g!==lastG){ const h=document.createElement("h3"); h.textContent=ind.g; host.appendChild(h); lastG=ind.g; }
+    const scale=ind.hi?100:Math.max(ind.t*1.7,ind.t+8);
+    const d=document.createElement("div"); d.className="ind";
+    d.innerHTML=`<div class="ind-h"><span class="ind-n">${ind.n}</span>
+      <span class="ind-d">${ind.hi?"สูงดีกว่า":"ต่ำดีกว่า"}</span>
+      <span class="ind-t">เป้า ${ind.hi?"≥ ":"< "}${ind.t}${ind.u}</span></div>`;
+    const RW=Math.max(380,Math.floor(host.clientWidth||560)), TRK=RW-132, RH=27;
+    const s=el("svg",{viewBox:`0 0 ${RW} ${list.length*RH+8}`,width:"100%",height:list.length*RH+8});
+    list.forEach((c,i)=>{
+      const v=getter(c,ind.k), y=i*RH+5;
+      s.appendChild(el("rect",{x:0,y:y,width:TRK,height:17,rx:4,fill:cv("--grid")}));
+      const met=ind.hi?v>=ind.t:v<ind.t;
+      s.appendChild(el("rect",{x:0,y:y,width:Math.max(3,v/scale*TRK),height:17,rx:4,fill:cv(c.v)}));
+      const t=el("text",{x:TRK+11,y:y+14,"font-size":15,"font-weight":700,
+        "font-family":'"IBM Plex Mono",monospace',fill:met?cv("--good-ink"):cv("--ink")});
+      t.textContent=fmt(v,v%1?1:0)+ind.u+(met?" ✓":""); s.appendChild(t);
+    });
+    const tx=ind.t/scale*TRK;
+    s.appendChild(el("line",{x1:tx,x2:tx,y1:1,y2:list.length*RH+4,stroke:cv("--ink"),"stroke-width":2.2}));
+    d.appendChild(s); host.appendChild(d);
+  });
+}
+
+/* ═══════════════ มุมมอง ═══════════════ */
+const VTITLE={overview:["ภาพรวม","สถานะล่าสุดของทั้งสามศูนย์"],
+  mch:["อนามัยแม่และเด็ก","ตัวชี้วัด 15 ตัว ตามนิยาม UNHCR Standards and Indicators Guide 2019"],
+  gi:["โรคติดเชื้อทางเดินอาหาร","เส้นโค้งระบาด เกณฑ์แจ้งเตือน และทะเบียนผู้ป่วย"],
+  ncd:["โรคไม่ติดต่อเรื้อรัง","ลำดับขั้นการดูแลและการควบคุมโรค"],
+  dq:["คุณภาพข้อมูล","ความครบถ้วน ความทันเวลา และเรคคอร์ดที่ต้องแก้ไข"]};
+
+function kpi(list){ return `<section class="kpis">`+list.map(k=>
+  `<div class="kpi ${k.cls||""}"><div class="lab">${k.lab}</div>
+   <div class="val mono">${k.val}${k.u?`<small>${k.u}</small>`:""}</div>
+   <div class="sub">${k.sub}</div></div>`).join("")+`</section>`; }
+
+/* ---------- ภาพรวม ---------- */
+function vOverview(){
+  const a=alerts(), over=a.filter(x=>!x.ok).length;
+  const n=WEEKS.length-1;
+  const awdRate=awdAll(n)/pop()*1000;
+  const prev=(awdAll(n-1)+awdAll(n-2)+awdAll(n-3))/3;
+  const chg=(awdAll(n)/prev-1)*100;
+  const mchPass=MCHIND.filter(ind=>{const v=wavg(ind.k); return ind.hi?v>=ind.t:v<ind.t;}).length;
+  const ncdCtrl=sum(L(),c=>c.ncd.casc[3])/sum(L(),c=>c.ncd.casc[0])*100;
+  const dq=sum(L(),c=>dqTot(c))/L().length;
+
+  const groups=[
+   {v:"mch",n:"อนามัยแม่และเด็ก",col:"--c1",
+    big:`${mchPass}`,u:`จาก ${MCHIND.length} ตัวชี้วัดผ่านเป้า`,
+    st:mchPass>=10?["ผ่าน","pill-ok"]:mchPass>=6?["เฝ้าระวัง","pill-warn"]:["ต้องแก้ไข","pill-bad"],
+    msg:"ช่องว่างใหญ่สุดอยู่ที่การฝากครรภ์ครั้งแรกและการดูแลหลังคลอด",
+    spark:MONTHS.map((_,i)=>wavg2("anc1",i))},
+   {v:"gi",n:"โรคติดเชื้อทางเดินอาหาร",col:"--d1",
+    big:fmt(awdRate,2),u:"ต่อ 1,000 คน/สัปดาห์",
+    st:chg>=40?["ต้องแก้ไข","pill-bad"]:chg>=15?["เฝ้าระวัง","pill-warn"]:["ผ่าน","pill-ok"],
+    msg:`${a.length} เหตุการณ์เปิดอยู่ · เทียบค่าเฉลี่ย 3 สัปดาห์ ${chg>=0?"สูงขึ้น":"ลดลง"} ${fmt(Math.abs(chg),0)}%`,
+    spark:WEEKS.map((_,i)=>awdAll(i)/pop()*1000)},
+   {v:"ncd",n:"โรคไม่ติดต่อเรื้อรัง",col:"--c3",
+    big:fmt(ncdCtrl,1),u:"% ควบคุมความดันได้",
+    st:ncdCtrl>=50?["ผ่าน","pill-ok"]:ncdCtrl>=35?["เฝ้าระวัง","pill-warn"]:["ต้องแก้ไข","pill-bad"],
+    msg:"เกณฑ์ สธ. ร้อยละ 50 · จุดรั่วอยู่ที่ความต่อเนื่องของการได้รับยา",
+    spark:QTRS.map((_,i)=>sum(L(),c=>c.ncd.ctrlQ[i]*c.ncd.casc[0])/sum(L(),c=>c.ncd.casc[0]))}];
+
+  document.getElementById("view").innerHTML=`
+   ${kpi([
+    {cls:over?"bad":"ok",lab:"เหตุการณ์เฝ้าระวังที่เกินกำหนดยืนยัน",val:String(over),u:"รายการ",
+     sub:`จาก ${a.length} เหตุการณ์ที่เข้าเกณฑ์ · กรอบเวลา 48 ชั่วโมง`},
+    {lab:"ประชากรในความดูแล",val:num(pop()),u:"คน",sub:`${L().length} ศูนย์ · รับบริการ ${num(sum(L(),c=>c.consult))} ครั้งในสัปดาห์`},
+    {cls:chg>=40?"bad":chg>=15?"warn":"",lab:"อุบัติการณ์อุจจาระร่วงเฉียบพลัน",val:fmt(awdRate,2),u:"",
+     sub:`<span class="${chg>=15?'up':'flat'}">${chg>=0?"▲":"▼"} ${fmt(Math.abs(chg),0)}%</span> ต่อ 1,000 คน/สัปดาห์`},
+    {cls:dq>=90?"ok":dq>=80?"warn":"bad",lab:"คะแนนคุณภาพข้อมูล",val:fmt(dq,1),u:`เกรด ${grade(dq)}`,
+     sub:`ถ่วงน้ำหนัก 5 มิติ · ${L().length>1?"เฉลี่ยทั้งสามศูนย์":"ศูนย์ที่เลือก"}`}])}
+
+   <div class="row rsplit">
+     <section class="card">
+       <p class="eyebrow">ต้องจัดการก่อน</p>
+       <h2>เหตุการณ์ที่เข้าเกณฑ์แจ้งเตือน</h2>
+       <p class="note">เรียงตามเวลาคงเหลือก่อนครบกำหนดยืนยัน 48 ชั่วโมงนับจากวันที่หน่วยบริการพบผู้ป่วย</p>
+       <div id="alist"></div>
+     </section>
+     <section class="card">
+       <p class="eyebrow">สถานะการนำส่ง</p>
+       <h2>ศูนย์พักพิง</h2>
+       <div id="cstrip" style="display:flex;flex-direction:column;gap:10px"></div>
+     </section>
+   </div>
+
+   <div class="row r3" id="dgrow"></div>
+
+   <section class="card">
+     <p class="eyebrow">คิวงาน</p>
+     <h2>งานที่ต้องทำ เรียงตามความเร่งด่วน</h2>
+     <div id="tasks"></div>
+   </section>`;
+
+  document.getElementById("alist").innerHTML = a.length
+    ? a.sort((x,y)=>({over:0,near:1,okk:2})[x.sla]-({over:0,near:1,okk:2})[y.sla]).map(v=>
+      `<div class="alert"><div class="sev ${v.sev}" aria-hidden="true">${v.sev==="good"?"✓":"!"}</div>
+        <div><p class="ttl">${v.ttl} — ${v.camp}</p><p class="meta">${v.l1}<br>${v.l2}</p></div>
+        <div class="sla ${v.sla}"><b>${v.big}</b>${v.small}</div></div>`).join("")
+    : `<p class="note">ไม่มีเหตุการณ์ที่เข้าเกณฑ์แจ้งเตือนในขอบเขตที่เลือก</p>`;
+
+  document.getElementById("cstrip").innerHTML=L().map(c=>`
+    <div class="camp"><div class="camp-h"><span class="dot" style="background:var(${c.v})"></span>
+      <p class="camp-n">${c.name}</p><span class="camp-t ${c.sync.cls}">${c.sync.st}</span></div>
+      <dl class="camp-rows"><dt>ประชากร</dt><dd>${num(c.pop)}</dd>
+      <dt>ซิงก์ล่าสุด</dt><dd>${c.sync.last}</dd>
+      <dt>คิวค้าง</dt><dd>${num(c.sync.q)}</dd>
+      <dt>คุณภาพข้อมูล</dt><dd>${fmt(dqTot(c),1)} (${grade(dqTot(c))})</dd></dl></div>`).join("");
+
+  const dg=document.getElementById("dgrow");
+  dg.innerHTML=groups.map((g,i)=>`<button class="dg" data-go="${g.v}">
+    <span class="nm"><i class="sw" style="background:var(${g.col})"></i>${g.n}
+      <span class="${g.st[1]}">${g.st[0]}</span></span>
+    <span class="big mono">${g.big}<small>${g.u}</small></span>
+    <span class="msg">${g.msg}</span>
+    <span class="chartbox" id="sp${i}"></span></button>`).join("");
+  groups.forEach((g,i)=>{
+    const box=document.getElementById("sp"+i); if(!box) return;
+    const W=Math.max(140,box.clientWidth||200), H=46;
+    const s=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",height:H});
+    const lo=Math.min(...g.spark)*0.94, hi=Math.max(...g.spark)*1.06;
+    const pts=g.spark.map((v,j)=>[4+(W-8)*j/(g.spark.length-1), H-6-((v-lo)/((hi-lo)||1))*(H-12)]);
+    s.appendChild(el("polyline",{points:pts.map(p=>p.join(",")).join(" "),fill:"none",
+      stroke:cv(g.col),"stroke-width":2.4,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    s.appendChild(el("circle",{cx:pts[pts.length-1][0],cy:pts[pts.length-1][1],r:4,fill:cv(g.col)}));
+    box.appendChild(s);
+  });
+  dg.querySelectorAll(".dg").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+
+  const t=[];
+  L().forEach(c=>{
+    c.alerts.filter(x=>x.sla!=="okk").forEach(x=>t.push({lvl:x.ok?"--warning":"--critical",ord:x.ok?1:0,
+      h:`ยืนยันเหตุการณ์ ${x.ttl} — ${c.name}`,p:x.l1,big:x.big,small:x.small}));
+    const ms=cnt(c.report,"X");
+    if(ms) t.push({lvl:"--critical",ord:0,h:`ส่งรายงานรายสัปดาห์ที่ค้าง — ${c.name}`,
+      p:`ค้าง ${ms} สัปดาห์ในรอบ 13 สัปดาห์ · สัปดาห์ที่ไม่ส่งไม่นับเป็นการรายงาน`,big:String(ms),small:"สัปดาห์"});
+    const er=c.err.filter(e=>e[3]==="ERROR").reduce((s2,e)=>s2+e[2],0);
+    if(er) t.push({lvl:"--warning",ord:2,h:`แก้เรคคอร์ดที่ถูกปฏิเสธ — ${c.name}`,
+      p:`${er} เรคคอร์ดยังไม่เข้าส่วนกลาง จึงยังไม่ถูกนับในตัวชี้วัดใด`,big:String(er),small:"เรคคอร์ด"});
+    const lt=Math.round(c.ncd.casc[0]*c.ncd.ltfu/100);
+    if(lt>20) t.push({lvl:"--warning",ord:3,h:`ติดตามผู้ป่วยโรคเรื้อรังที่ขาดนัด — ${c.name}`,
+      p:`${lt} รายขาดนัดเกิน 90 วัน ควรออกเยี่ยมบ้านพร้อมรอบส่งยา`,big:String(lt),small:"ราย"});
+  });
+  t.sort((a1,b1)=>a1.ord-b1.ord);
+  document.getElementById("tasks").innerHTML=t.length?t.slice(0,6).map((v,i)=>
+    `<div class="task"><div class="tno" style="background:var(${v.lvl})">${i+1}</div>
+      <p><b>${v.h}</b><br>${v.p}</p>
+      <div class="due"><b>${v.big}</b>${v.small}</div></div>`).join("")
+    :`<p class="note">ไม่มีงานค้างในขอบเขตที่เลือก</p>`;
+}
+function wavg2(k,i){ return sum(L(),c=>c.mch.trend[k][i]*c.pop)/pop(); }
+
+/* ---------- อนามัยแม่และเด็ก ---------- */
+function vMCH(){
+  const births=sum(L(),c=>c.mch.births);
+  const pass=MCHIND.filter(ind=>{const v=wavg(ind.k); return ind.hi?v>=ind.t:v<ind.t;}).length;
+  document.getElementById("view").innerHTML=`
+   ${kpi([
+    {lab:"การเกิดมีชีพในงวด",val:num(births),u:"ราย",sub:`เด็กอายุต่ำกว่า 5 ปีในความดูแล ${num(Math.round(pop()*0.109))} คน`},
+    {cls:wavg("anc1")>=100?"ok":"bad",lab:"ฝากครรภ์ครั้งแรก ≤ 12 สัปดาห์",val:fmt(wavg("anc1"),1),u:"%",
+     sub:"เป้า 100% · ตัวชี้วัดที่ห่างเป้ามากที่สุดในกลุ่ม"},
+    {cls:wavg("sba")>=100?"ok":"warn",lab:"คลอดโดยบุคลากรที่มีทักษะ",val:fmt(wavg("sba"),1),u:"%",
+     sub:"ผู้ทำคลอดพื้นบ้านไม่นับตามนิยาม UNHCR"},
+    {cls:pass>=10?"ok":pass>=6?"warn":"bad",lab:"ตัวชี้วัดที่ผ่านเป้า",val:`${pass}`,u:`จาก ${MCHIND.length}`,
+     sub:"ค่าเฉลี่ยถ่วงน้ำหนักตามประชากร"}])}
+
+   <section class="card">
+     <p class="eyebrow">แนวโน้ม 12 เดือน</p>
+     <h2>ตัวชี้วัดหลักกำลังไปทางไหน</h2>
+     <p class="note">กันยายน 2568 – สิงหาคม 2569 · เส้นประแนวนอนคือค่าเป้าหมาย</p>
+     <div class="legend" id="lg-mcht"></div>
+     <div class="row r2" id="mtrend"></div>
+   </section>
+
+   <section class="card">
+     <p class="eyebrow">ตัวชี้วัดเทียบเป้าหมาย</p>
+     <h2>ตัวชี้วัด 15 ตัว แยกตามกลุ่มบริการ</h2>
+     <p class="note">เส้นทึบแนวตั้งคือค่าเป้าหมาย · แถบคือค่าของแต่ละศูนย์</p>
+     <div class="legend" id="lg-mch"></div>
+     <div id="mind"></div>
+   </section>`;
+  legend("lg-mch",campLegend()); legend("lg-mcht",campLegend().map(x=>({...x,line:true})));
+  const host=document.getElementById("mtrend");
+  MCHTREND.forEach((ind,i)=>{
+    const d=document.createElement("div");
+    d.innerHTML=`<p style="margin:0 0 6px;font-size:15.5px;font-weight:600">${ind.n}</p>
+      <div class="chartbox" id="mt${i}"></div>`;
+    host.appendChild(d);
+  });
+  MCHTREND.forEach((ind,i)=>{
+    const box=document.getElementById("mt"+i);
+    const ser=L().map(c=>({n:c.name,v2:c.v,v:c.mch.trend[ind.k]}));
+    const all=ser.flatMap(s=>s.v);
+    lineChart(box,MONTHS,ser,{h:230,r:0,suffix:"%",target:ind.t,
+      lo:Math.max(0,Math.min(...all)-8),hi:Math.max(ind.t*1.06,Math.max(...all)*1.06),
+      xlab:j=>MONTHS[j]+" "+(j<4?"2568":"2569")});
+  });
+  bulletRows(document.getElementById("mind"),MCHIND,(c,k)=>c.mch[k]);
+}
+
+/* ---------- โรคติดเชื้อทางเดินอาหาร ---------- */
+function vGI(){
+  const n=WEEKS.length-1, tot=giAll(n), awd=awdAll(n);
+  const consult=sum(L(),c=>c.consult);
+  const lab=L().flatMap(c=>c.ll).filter(r=>r[8]!=="NOT_TESTED").length;
+  const llAll=L().flatMap(c=>c.ll.map(r=>[c.name,...r]));
+  document.getElementById("view").innerHTML=`
+   ${kpi([
+    {lab:"ผู้ป่วยกลุ่มทางเดินอาหารในสัปดาห์",val:num(tot),u:"ราย",
+     sub:`อุจจาระร่วงเฉียบพลัน ${awd} ราย · อื่น ๆ ${tot-awd} ราย`},
+    {lab:"อุบัติการณ์",val:fmt(tot/pop()*1000,2),u:"",sub:"ต่อ 1,000 คน/สัปดาห์ · ตัวหารจากทะเบียน UNHCR"},
+    {lab:"สัดส่วนการป่วย",val:fmt(tot/consult*100,1),u:"%",
+     sub:`ของการรับบริการ ${num(consult)} ครั้ง · นิยาม WHO EMRO`},
+    {cls:lab/llAll.length>=0.5?"ok":"warn",lab:"ส่งตรวจทางห้องปฏิบัติการ",
+     val:`${lab}`,u:`จาก ${llAll.length}`,sub:"ผู้ป่วยเฝ้าระวังที่บันทึกใน 14 วันล่าสุด"}])}
+
+   <section class="card">
+     <p class="eyebrow">เส้นโค้งระบาด</p>
+     <h2>ผู้ป่วยรายสัปดาห์แยกตามภาวะ</h2>
+     <p class="note">สัปดาห์ระบาดวิทยาที่ 22–34 · แท่งซ้อนแสดงส่วนประกอบของผู้ป่วยแต่ละสัปดาห์ ไม่ใช่อัตรา</p>
+     <div class="legend" id="lg-gi"></div>
+     <div class="chartbox" id="epicurve"></div>
+     <details class="tv"><summary>ดูเป็นตาราง</summary><div class="tw" id="tb-epi"></div></details>
+   </section>
+
+   <div class="row r2">
+     <section class="card">
+       <p class="eyebrow">เทียบเกณฑ์แจ้งเตือน</p>
+       <h2>อุบัติการณ์อุจจาระร่วงเฉียบพลัน</h2>
+       <p class="note">ต่อ 1,000 คน/สัปดาห์ · เส้นประคือเกณฑ์ 1.5 เท่าของค่าเฉลี่ย 3 สัปดาห์ก่อนหน้า ของแต่ละศูนย์</p>
+       <div class="legend" id="lg-awd"></div>
+       <div class="chartbox" id="awdline"></div>
+     </section>
+     <section class="card">
+       <p class="eyebrow">การกระจายเชิงพื้นที่</p>
+       <h2>ผู้ป่วยรายโซนในสัปดาห์นี้</h2>
+       <p class="note">ใช้ตรวจหาการระบาดเป็นกลุ่มก้อน · แถบสีแดงคือโซนที่มีการแจ้งเตือนเปิดอยู่</p>
+       <div class="chartbox" id="zones"></div>
+     </section>
+   </div>
+
+   <section class="card">
+     <p class="eyebrow">ทะเบียนผู้ป่วยเฝ้าระวัง</p>
+     <h2>ผู้ป่วยที่บันทึกในช่วง 14 วันล่าสุด</h2>
+     <p class="note">ข้อมูลนิรนามตามที่ส่งเข้าส่วนกลาง ไม่มีชื่อ เลขประจำตัว หรือเลขเวชระเบียน</p>
+     <div class="tw" id="tb-ll"></div>
+   </section>`;
+
+  const ser=CONDS.map(c=>({n:c.n,v2:c.v,v:WEEKS.map((_,i)=>sum(L(),x=>x.gi[c.k][i]))}));
+  legend("lg-gi",CONDS.map(c=>({n:c.n,v:c.v})));
+  stackedBars(document.getElementById("epicurve"),WEEKS,ser,WEEKS.map(w=>"W"+w));
+  table("tb-epi",["ภาวะ",...WEEKS.map(w=>"W"+w)],ser.map(s=>[s.n,...s.v]));
+
+  legend("lg-awd",campLegend().map(x=>({...x,line:true})).concat([{n:"เกณฑ์แจ้งเตือนของศูนย์ (เส้นประ สีตามศูนย์)",v:"--muted",line:true,dash:true}]));
+  const rate=(c,i)=>c.gi.AWD[i]/c.pop*1000;
+  const thr=(c,i)=>i<3?null:1.5*(c.gi.AWD[i-1]+c.gi.AWD[i-2]+c.gi.AWD[i-3])/3/c.pop*1000;
+  const ls=[]; L().forEach(c=>{
+    ls.push({n:c.name,v2:c.v,v:WEEKS.map((_,i)=>rate(c,i))});
+    ls.push({n:c.name+" เกณฑ์",v2:c.v,dash:true,v:WEEKS.map((_,i)=>thr(c,i)||rate(c,i))});
+  });
+  lineChart(document.getElementById("awdline"),WEEKS.map(w=>"W"+w),ls,
+    {h:300,hi:Math.max(...ls.flatMap(s=>s.v))*1.15,tnote:"ต่อ 1,000 คน/สัปดาห์"});
+
+  const hot={MAELA:"Z-04",UMPIEM:"Z-07",NUPO:"Z-02"};
+  const zr=[]; L().forEach(c=>c.zones.forEach(([z,v])=>
+    zr.push({n:(L().length>1?c.name.slice(0,3)+" ":"")+z,v,hot:hot[c.id]===z})));
+  zr.sort((a,b)=>b.v-a.v);
+  hBars(document.getElementById("zones"),zr.slice(0,8));
+
+  const LAB={PENDING:"รอผล",POSITIVE:"พบเชื้อ",NEGATIVE:"ไม่พบเชื้อ",NOT_TESTED:"ไม่ได้ส่งตรวจ"};
+  table("tb-ll",["ศูนย์","รหัสผู้ป่วย","รหัสบุคคล","อายุ","เพศ","ภาวะ","วันเริ่มป่วย","วันที่พบ","การจำแนก","ผลตรวจ","ส่งใน 48 ชม."],
+    llAll.map(r=>[r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],
+      `<span class="tag ${r[8]==="CONFIRMED"?"pill-bad":"pill-warn"}">${r[8]==="CONFIRMED"?"ยืนยันแล้ว":"สงสัย"}</span>`,
+      LAB[r[9]]||r[9],
+      `<span class="tag ${r[10]?"pill-ok":"pill-bad"}">${r[10]?"ทัน":"เกินกำหนด"}</span>`]));
+}
+
+/* ---------- โรคไม่ติดต่อเรื้อรัง ---------- */
+function vNCD(){
+  const reg=sum(L(),c=>c.ncd.casc[0]), ctrl=sum(L(),c=>c.ncd.casc[3]);
+  const ltfu=sum(L(),c=>c.ncd.ltfu*c.ncd.casc[0])/reg;
+  const stock=sum(L(),c=>c.ncd.stock);
+  document.getElementById("view").innerHTML=`
+   ${kpi([
+    {lab:"ผู้ป่วยความดันโลหิตสูงที่ขึ้นทะเบียน",val:num(reg),u:"ราย",
+     sub:`คิดเป็น ${fmt(reg/pop()*1000,1)} ต่อประชากร 1,000 คน`},
+    {cls:ctrl/reg*100>=50?"ok":"bad",lab:"ควบคุมความดันได้",val:fmt(ctrl/reg*100,1),u:"%",
+     sub:`${num(ctrl)} ราย · เกณฑ์ สธ. ร้อยละ 50 · นิยาม WHO HEARTS`},
+    {cls:ltfu<20?"ok":"warn",lab:"ขาดการติดตามเกิน 90 วัน",val:fmt(ltfu,0),u:"%",
+     sub:`ประมาณ ${num(Math.round(reg*ltfu/100))} ราย ต้องออกติดตาม`},
+    {cls:stock?"warn":"ok",lab:"ยาขาดคราวในรอบไตรมาส",val:String(stock),u:"สัปดาห์-รายการ",
+     sub:"ตัวชี้วัด Drug availability ตาม WHO HEARTS"}])}
+
+   <div class="row r2">
+     <section class="card">
+       <p class="eyebrow">ลำดับขั้นการดูแล</p>
+       <h2>ผู้ป่วยหลุดออกจากการดูแลตรงจุดไหน</h2>
+       <p class="note">ร้อยละของผู้ขึ้นทะเบียนในแต่ละศูนย์ · ควบคุมได้ = ความดันครั้งล่าสุดต่ำกว่า 140/90</p>
+       <div class="legend" id="lg-ncd"></div>
+       <div class="chartbox" id="casc"></div>
+       <details class="tv"><summary>ดูเป็นตาราง</summary><div class="tw" id="tb-casc"></div></details>
+     </section>
+     <section class="card">
+       <p class="eyebrow">แนวโน้ม 6 ไตรมาส</p>
+       <h2>อัตราการควบคุมความดันโลหิต</h2>
+       <p class="note">ร้อยละของผู้ขึ้นทะเบียนที่ควบคุมได้ · เส้นประคือเกณฑ์ สธ. ที่ร้อยละ 50</p>
+       <div class="legend" id="lg-ncdq"></div>
+       <div class="chartbox" id="ncdq"></div>
+     </section>
+   </div>
+
+   <section class="card">
+     <p class="eyebrow">แยกตามโรค</p>
+     <h2>ผู้ขึ้นทะเบียนและผู้ที่ควบคุมได้</h2>
+     <div class="tw" id="tb-dx"></div>
+     <p class="note" style="margin-top:14px">ผู้ป่วยที่เป็นทั้งความดันโลหิตสูงและเบาหวานนับแยกเป็นกลุ่มของตัวเอง เพื่อไม่ให้ตัวหารของทั้งสองโรคซ้อนทับกัน</p>
+   </section>`;
+
+  legend("lg-ncd",campLegend());
+  groupedBars(document.getElementById("casc"),STAGEL,
+    L().map(c=>({n:c.name,v2:c.v,v:c.ncd.casc.map(x=>x/c.ncd.casc[0]*100)})),
+    {max:100,suffix:"%",h:300,b:66,bw:40,
+     note:(i,j)=>`${L()[j].name} · ${num(L()[j].ncd.casc[i])} ราย จาก ${num(L()[j].ncd.casc[0])} ราย`});
+  table("tb-casc",["ศูนย์",...STAGES],L().map(c=>[c.name,...c.ncd.casc.map(v=>
+    `${num(v)} (${fmt(v/c.ncd.casc[0]*100,1)}%)`)]));
+
+  legend("lg-ncdq",campLegend().map(x=>({...x,line:true})));
+  lineChart(document.getElementById("ncdq"),QTRS,
+    L().map(c=>({n:c.name,v2:c.v,v:c.ncd.ctrlQ})),
+    {h:300,suffix:"%",lo:0,hi:60,target:50});
+
+  const dx=["ความดันโลหิตสูง","เบาหวาน","ทั้งสองโรค"];
+  table("tb-dx",["โรค","ขึ้นทะเบียน","ควบคุมได้","ร้อยละ"],dx.map((d,i)=>{
+    const r=sum(L(),c=>c.ncd.byDx[i][1]), k=sum(L(),c=>c.ncd.byDx[i][2]);
+    return [d,num(r),num(k),fmt(k/r*100,1)+"%"];
+  }));
+}
+
+/* ---------- คุณภาพข้อมูล ---------- */
+function vDQ(){
+  const wk=L().length*WEEKS.length;
+  const rep=sum(L(),c=>cnt(c.report,"RZL"));
+  const err=sum(L(),c=>c.err.filter(e=>e[3]==="ERROR").reduce((s,e)=>s+e[2],0));
+  const q=sum(L(),c=>c.sync.q);
+  const dq=sum(L(),c=>dqTot(c))/L().length;
+  const a=alerts(), onT=a.filter(x=>x.ok).length;
+  document.getElementById("view").innerHTML=`
+   ${kpi([
+    {cls:dq>=90?"ok":dq>=80?"warn":"bad",lab:"คะแนนคุณภาพข้อมูลรวม",val:fmt(dq,1),u:`เกรด ${grade(dq)}`,
+     sub:"ถ่วงน้ำหนัก ครบถ้วน 30% ถูกต้อง 25% สอดคล้อง 20% ทันเวลา 15% ไม่ซ้ำซ้อน 10%"},
+    {cls:rep/wk>=0.9?"ok":rep/wk>=0.7?"warn":"bad",lab:"ความครบถ้วนของการรายงานรายสัปดาห์",
+     val:fmt(rep/wk*100,1),u:"%",sub:`${rep} จาก ${wk} ศูนย์-สัปดาห์ · เป้า ≥ 90%`},
+    {cls:err?"bad":"ok",lab:"เรคคอร์ดที่ถูกปฏิเสธ ยังไม่เข้าส่วนกลาง",val:num(err),u:"",
+     sub:`คิวรอส่งอีก ${num(q)} เรคคอร์ด`},
+    {cls:onT===a.length?"ok":"bad",lab:"ยืนยันเหตุการณ์ภายใน 48 ชั่วโมง",
+     val:a.length?fmt(onT/a.length*100,0):"—",u:a.length?"%":"",
+     sub:`${onT} จาก ${a.length} เหตุการณ์ · เป้า 100%`}])}
+
+   <div class="row r2">
+     <section class="card">
+       <p class="eyebrow">ความครบถ้วน</p>
+       <h2>จังหวะการส่งรายงานรายสัปดาห์</h2>
+       <p class="note">สัปดาห์ที่ 22–34 · การรายงานว่าไม่มีผู้ป่วยนับเป็นการรายงาน ส่วนการไม่ส่งเลยไม่นับ</p>
+       <div class="chartbox"><div class="hb" id="hb"></div></div>
+       <div class="hbkey">
+         <span><i class="hb-R"></i> ส่งแล้ว</span><span><i class="hb-Z"></i> รายงานว่าไม่มีผู้ป่วย</span>
+         <span><i class="hb-L"></i> ส่งช้ากว่ากำหนด</span><span><i class="hb-X"></i> ไม่ได้ส่ง</span>
+       </div>
+       <p class="note" id="hbnote" style="margin-top:14px"></p>
+     </section>
+     <section class="card">
+       <p class="eyebrow">คะแนนรายมิติ</p>
+       <h2>คุณภาพข้อมูล 5 มิติ</h2>
+       <p class="note">แสดงแยกรายมิติเสมอ เพราะความทันเวลาของศูนย์ที่ไม่มีอินเทอร์เน็ตต่ำจากข้อจำกัดเชิงโครงสร้าง ไม่ใช่จากการทำงานของเจ้าหน้าที่</p>
+       <div class="legend" id="lg-dq"></div>
+       <div class="chartbox" id="dqbars"></div>
+     </section>
+   </div>
+
+   <section class="card">
+     <p class="eyebrow">ต้องแก้ไข</p>
+     <h2>เรคคอร์ดที่ไม่ผ่านกฎตรวจสอบคุณภาพ</h2>
+     <p class="note">รหัสกฎอ้างอิงชีตกฎคุณภาพข้อมูลในเอกสาร Dataset Spec · ระดับ ERROR ถูกปฏิเสธและยังไม่ถูกนับในตัวชี้วัดใด</p>
+     <div class="tw" id="tb-err"></div>
+   </section>`;
+
+  const g=document.getElementById("hb");
+  g.style.gridTemplateColumns=`auto repeat(${WEEKS.length},1fr)`;
+  let h="<div></div>"+WEEKS.map(w=>`<div class="hbweek">${w}</div>`).join("");
+  L().forEach(c=>{ h+=`<div class="hbname">${c.name}</div>`+
+    c.report.split("").map((s,i)=>`<div class="hb-c hb-${s}" title="${c.name} · สัปดาห์ที่ ${WEEKS[i]} — ${HBT[s]}"></div>`).join(""); });
+  g.innerHTML=h;
+  document.getElementById("hbnote").textContent = L().length===1
+    ? `${L()[0].name}: ส่งแล้ว ${cnt(L()[0].report,"RZ")} สัปดาห์ · ส่งช้า ${cnt(L()[0].report,"L")} · ไม่ได้ส่ง ${cnt(L()[0].report,"X")} จาก 13 สัปดาห์`
+    : "นุโพขาดการส่ง 3 สัปดาห์และส่งช้า 2 สัปดาห์ในรอบ 13 สัปดาห์ ตรงกับช่วงที่เครื่องปั่นไฟหยุดทำงาน";
+
+  legend("lg-dq",L().map(c=>({n:`${c.name} · รวม ${fmt(dqTot(c),1)}`,v:c.v})));
+  groupedBars(document.getElementById("dqbars"),DQDL,
+    L().map(c=>({n:c.name,v2:c.v,v:c.dq})),{max:100,h:300,b:64,bw:34});
+
+  const map={};
+  L().forEach(c=>c.err.forEach(([k,d,n2,lv])=>{
+    map[k]=map[k]||{k,d,lv,tot:0,by:{}}; map[k].tot+=n2; map[k].by[c.name]=n2; }));
+  const rows=Object.values(map).sort((x,y)=>(x.lv==="ERROR"?0:1)-(y.lv==="ERROR"?0:1)||y.tot-x.tot);
+  const PILL={ERROR:"pill-bad",WARNING:"pill-warn",KPI:"pill-ok"};
+  table("tb-err",["รหัสกฎ","สิ่งที่ผิด","ระดับ",...(L().length>1?L().map(c=>c.name):[]),"รวม"],
+    rows.map(r=>[`<span class="mono" style="font-weight:700">${r.k}</span>`,r.d,
+      `<span class="tag ${PILL[r.lv]}">${r.lv}</span>`,
+      ...(L().length>1?L().map(c=>r.by[c.name]||"–"):[]),`<b>${r.tot}</b>`]));
+}
+
+/* ═══════════════ router ═══════════════ */
+const VIEWS={overview:vOverview,mch:vMCH,gi:vGI,ncd:vNCD,dq:vDQ};
+function render(){
+  document.getElementById("vtitle").firstChild.nodeValue=VTITLE[view][0];
+  document.getElementById("vsub").textContent=VTITLE[view][1];
+  document.querySelectorAll("#nav button").forEach(b=>
+    b.setAttribute("aria-current",b.dataset.v===view?"true":"false"));
+  VIEWS[view]();
+}
+function go(v){ view=v; render(); window.scrollTo({top:0,behavior:"instant"}); }
+document.querySelectorAll("#nav button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
+document.querySelectorAll("#campseg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#campseg button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true"); camp=b.dataset.camp; render();
+}));
+const zb=[...document.querySelectorAll(".zoomer button")];
+function setZoom(z,save){
+  document.documentElement.style.setProperty("--z",z);
+  zb.forEach(b=>b.setAttribute("aria-pressed",b.dataset.z===String(z)?"true":"false"));
+  if(save){ try{ localStorage.setItem("tak-z2",z); }catch(e){} }
+  requestAnimationFrame(render);
+}
+zb.forEach(b=>b.addEventListener("click",()=>setZoom(b.dataset.z,true)));
+let z0="1.12"; try{ const v=localStorage.getItem("tak-z2"); if(v) z0=v; }catch(e){}
+document.documentElement.style.setProperty("--z",z0);
+zb.forEach(b=>b.setAttribute("aria-pressed",b.dataset.z===z0?"true":"false"));
+render();
+window.addEventListener("resize",()=>{clearTimeout(window.__t);window.__t=setTimeout(render,160);});
+if(window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",render);
+})();
+</script>
+
+</body>
+</html>
